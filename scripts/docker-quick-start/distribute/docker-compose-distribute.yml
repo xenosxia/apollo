@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  apollo-configservice-dev:
+    image: apolloconfig/apollo-configservice:2.0.0-SNAPSHOT
+    container_name: apollo-configservice-dev
+    ports:
+      - "58080:8080"
+    volumes:
+      - ./config/application-github.properties:/apollo-configservice/config/application-github.properties
+  apollo-adminservice-dev:
+    image: apolloconfig/apollo-adminservice:2.0.0-SNAPSHOT
+    container_name: apollo-adminservice-dev
+    ports:
+      - "58090:8090"
+    depends_on:
+      - apollo-configservice-dev
+    volumes:
+      - ./admin/application-github.properties:/apollo-adminservice/config/application-github.properties
+  apollo-portal:
+    image: apolloconfig/apollo-portal:2.0.0-SNAPSHOT
+    container_name: apollo-portal
+    ports:
+      - "58070:8070"
+    depends_on:
+      - apollo-configservice-dev
+    volumes:
+      - ./portal/application-github.properties:/apollo-portal/config/application-github.properties
+      - ./portal/apollo-env.properties:/apollo-portal/config/apollo-env.properties
